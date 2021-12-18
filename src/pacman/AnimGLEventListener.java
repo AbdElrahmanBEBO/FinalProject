@@ -22,8 +22,6 @@ public class AnimGLEventListener extends AnimListener {
     int textures[] = new int[textureNames.length];
     public BitSet keyBits = new BitSet(256);
     int keyCode;
-    ArrayList NEW;
-    int ind = 0;
     boolean IS = false;
 
     public void init(GLAutoDrawable gld) {
@@ -60,6 +58,23 @@ public class AnimGLEventListener extends AnimListener {
     public void displayChanged(GLAutoDrawable drawable, boolean modeChanged, boolean deviceChanged) {
     }
 
+    public void Draw(GL gl){
+        gl.glEnable(GL.GL_BLEND);
+        gl.glBindTexture(GL.GL_TEXTURE_2D, textures[textureNames.length-1]);
+        gl.glPushMatrix();
+        gl.glBegin(GL.GL_QUADS);
+        gl.glTexCoord2f(0.0f, 0.0f);
+        gl.glVertex3f(-1.0f, -1.0f, -1.0f);
+        gl.glTexCoord2f(1.0f, 0.0f);
+        gl.glVertex3f(1.0f, -1.0f, -1.0f);
+        gl.glTexCoord2f(1.0f, 1.0f);
+        gl.glVertex3f(1.0f, 1.0f, -1.0f);
+        gl.glTexCoord2f(0.0f, 1.0f);
+        gl.glVertex3f(-1.0f, 1.0f, -1.0f);
+        gl.glEnd();
+        gl.glPopMatrix();
+        gl.glDisable(GL.GL_BLEND);
+    }
     public void DrawSprite(GL gl,double x, double y, float scale){
         gl.glEnable(GL.GL_BLEND);
         gl.glBindTexture(GL.GL_TEXTURE_2D, textures[0]);
@@ -79,29 +94,35 @@ public class AnimGLEventListener extends AnimListener {
         gl.glPopMatrix();
         gl.glDisable(GL.GL_BLEND);
     }
-    //TODO BUG(1)
     public void handleKeyPress() {
+
         if (isKeyPressed(KeyEvent.VK_LEFT)) {
             for (int i = 0; i < LEFT.length; i++) {
                 if (((x == LEFT[i][0] && y ==LEFT[i][1]))){
-                    IS = true;
                     keyBits.clear(keyCode);
+                    IS = true;
                 }
             }
             if (!IS) x -=speed;
             System.out.println(x+",,,"+y);
         }
+//        else if (isKeyPressed(KeyEvent.VK_RIGHT)) {
+//            for (int i = 0; i < RIGHT.length; i++) {
+//                if (((x == RIGHT[i][0] && y == RIGHT[i][1]))) {
+//                    keyBits.clear(keyCode);
+//                    IS = true;
+//                }
+//            }
+//            if (!IS) x += speed;
+//            System.out.println(x + ",,," + y);
+//        }
         else if (isKeyPressed(KeyEvent.VK_RIGHT)) {
             for (int i = 0; i < RIGHT.length; i++) {
-                if (((x== RIGHT[i][0] && y==RIGHT[i][1]))){
-                    IS = true;
-                    keyBits.clear(keyCode);
-                    break;
+                if (x<RIGHT[i][0]){
+                    x += speed;
                 }
             }
-            if (!IS) x +=speed;
-
-            System.out.println(x+",,,"+y);
+            System.out.println(x + ",,," + y);
         }
         else if (isKeyPressed(KeyEvent.VK_DOWN)) {
             for (int i = 0; i < DOWN.length; i++) {
@@ -110,7 +131,7 @@ public class AnimGLEventListener extends AnimListener {
                     IS = true;
                 }
             }
-            if (!IS)  y -= speed;
+            if (!IS) y -= speed;
             System.out.println(x+",,,"+y);
         }
         else if (isKeyPressed(KeyEvent.VK_UP)) {
@@ -125,24 +146,6 @@ public class AnimGLEventListener extends AnimListener {
         }
         IS = false;
     }
-    //Don't Care
-    public void Draw(GL gl){
-        gl.glEnable(GL.GL_BLEND);
-        gl.glBindTexture(GL.GL_TEXTURE_2D, textures[textureNames.length-1]);
-        gl.glPushMatrix();
-        gl.glBegin(GL.GL_QUADS);
-        gl.glTexCoord2f(0.0f, 0.0f);
-        gl.glVertex3f(-1.0f, -1.0f, -1.0f);
-        gl.glTexCoord2f(1.0f, 0.0f);
-        gl.glVertex3f(1.0f, -1.0f, -1.0f);
-        gl.glTexCoord2f(1.0f, 1.0f);
-        gl.glVertex3f(1.0f, 1.0f, -1.0f);
-        gl.glTexCoord2f(0.0f, 1.0f);
-        gl.glVertex3f(-1.0f, 1.0f, -1.0f);
-        gl.glEnd();
-        gl.glPopMatrix();
-        gl.glDisable(GL.GL_BLEND);
-    }
     public void keyPressed(final KeyEvent event) {
         keyCode = event.getKeyCode();
         keyBits.set(keyCode);
@@ -151,9 +154,9 @@ public class AnimGLEventListener extends AnimListener {
 //        keyCode = event.getKeyCode();
 //        keyBits.clear(keyCode);
     }
-    public void keyTyped(final KeyEvent event) {
-    }
     public boolean isKeyPressed(final int keyCode) {
         return keyBits.get(keyCode);
+    }
+    public void keyTyped(final KeyEvent event) {
     }
 }
