@@ -106,22 +106,14 @@ public class AnimGLEventListener extends AnimListener {
             if (!IS) x -=speed;
             System.out.println(x+",,,"+y);
         }
-//        else if (isKeyPressed(KeyEvent.VK_RIGHT)) {
-//            for (int i = 0; i < RIGHT.length; i++) {
-//                if (((x == RIGHT[i][0] && y == RIGHT[i][1]))) {
-//                    keyBits.clear(keyCode);
-//                    IS = true;
-//                }
-//            }
-//            if (!IS) x += speed;
-//            System.out.println(x + ",,," + y);
-//        }
         else if (isKeyPressed(KeyEvent.VK_RIGHT)) {
             for (int i = 0; i < RIGHT.length; i++) {
-                if (x<RIGHT[i][0]){
-                    x += speed;
+                if (((x == RIGHT[i][0] && y == RIGHT[i][1]))) {
+                    keyBits.clear(keyCode);
+                    IS = true;
                 }
             }
+            if (!IS) x += speed;
             System.out.println(x + ",,," + y);
         }
         else if (isKeyPressed(KeyEvent.VK_DOWN)) {
@@ -151,8 +143,8 @@ public class AnimGLEventListener extends AnimListener {
         keyBits.set(keyCode);
     }
     public void keyReleased(final KeyEvent event) {
-//        keyCode = event.getKeyCode();
-//        keyBits.clear(keyCode);
+        keyCode = event.getKeyCode();
+        keyBits.clear(keyCode);
     }
     public boolean isKeyPressed(final int keyCode) {
         return keyBits.get(keyCode);
